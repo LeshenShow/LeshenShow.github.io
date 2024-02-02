@@ -1,0 +1,44 @@
+img {
+  width: 100px;
+}
+.userBody {
+  background-color: lightcoral;
+}
+
+.pageList {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+.pageList > span {
+  background-color: purple;
+  width: 50px;
+  text-align: center;
+}
+.pageList > span:hover{
+  background-color: violet;
+}
+.selectedPage {
+  font-weight: bold;
+}
+.followBtn {
+  background-color: lawngreen;
+  border: 0;
+  height: 30px;
+}
+.unfollowBtn {
+  background-color: rgb(235, 150, 202);
+  border: 0;
+  height: 30px;
+}
+.followCheck {
+  margin-top: 10px;
+}
+.usersList {
+  background-color: rgba(127, 255, 212, 0.3);
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 10px 0 10px 10px;
+}

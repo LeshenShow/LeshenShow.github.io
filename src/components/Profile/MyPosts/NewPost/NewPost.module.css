@@ -1,0 +1,47 @@
+.posts {
+  background-color: rgb(91, 61, 107);
+  display: flex;
+  min-height: 50px;
+  align-items: stretch;
+  padding: 5px;
+}
+.textarea {
+  flex-grow: 100;
+  display: flex;
+}
+textarea {
+  border: none;
+  background-color: rgba(162, 126, 173, 0.9);
+  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  cursor: default;
+}
+
+.button {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  flex-grow: 1;
+  margin-left: 5px;
+}
+.buttonClick {
+  background-color: rgb(126, 67, 182);
+  border: none;
+  height: 20px;
+  /* color: whitesmoke; */
+  width: 100%;
+}
+h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 5px;
+}
+textarea::-webkit-input-placeholder {
+  color: darkblue;
+  font-size: 16px;
+
+}

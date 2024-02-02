@@ -1,0 +1,50 @@
+.dialogs {
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+.dialogItems {
+  padding: 10px;
+}
+.dialogItems .active {
+  color: gold;
+}
+.dialog a {
+  color: black;
+  width: 100%;
+}
+.dialog {
+  text-decoration: none;
+  background-color: red;
+  margin-bottom: 5px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(151, 110, 173, 0.8);
+}
+.dialog:hover {
+  background-color: rgb(167, 131, 187);
+}
+.dialog:focus,
+.dialog:active {
+  background-color: rgb(156, 111, 180);
+}
+.photo {
+  width: 30px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.messages {
+  padding: 10px;
+  background-color: rebeccapurple;
+  height: 100%;
+}
+.messages .message {
+  background-color: rgb(133, 82, 184);
+  padding-left: 20px;
+  margin-bottom: 5px;
+  height: 50px;
+}
+textarea::-webkit-input-placeholder {
+  color: darkblue;
+}
