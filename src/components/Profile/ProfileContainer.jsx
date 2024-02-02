@@ -1,10 +1,9 @@
 import React from "react";
 import Profile from "./Profile";
-import axios from "axios";
 import { connect } from "react-redux";
-import { setUserProfile } from "../../redux/profileReducer";
+import { getUserProfile } from "../../redux/profileReducer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { usersAPI } from "../../api/api";
+import { Navigate } from "react-router-dom";
 
 function withRouter(Component) {
   function ComponentWithRouterProp(props) {
@@ -23,22 +22,22 @@ class ProfileContainer extends React.Component {
       userId = 2;
     }
     console.log("componentDidMount Props", this.props);
-    usersAPI.getUserProfile(userId)
-      .then((data) => {
-        this.props.setUserProfile(data);
-        // console.log("componentDidMount Response", response);
-        // console.log("data", data);
-      });
+    this.props.getUserProfile(userId);
+    // console.log("componentDidMount Response", response);// console.log("data", data);
   }
   render() {
+    if (!this.props.isAuth) {
+      return <Navigate to={"/login"} />;
+    }
     return <Profile {...this.props} profile={this.props.profile} />;
   }
 }
 
 let mapStateToProps = (state) => ({
   profile: state.profilePage.profile,
+  isAuth: state.auth.isAuth,
 });
-let mapDispatchToProps = { setUserProfile };
+let mapDispatchToProps = { getUserProfile };
 
 let withUrlDataContainerCompoment = withRouter(ProfileContainer);
 

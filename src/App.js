@@ -10,6 +10,7 @@ import NavbarContainer from "./components/Navbar/NavbarContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
+import LoginContainer from "./components/Login/LoginContainer";
 
 const App = (props) => {
   return (
@@ -19,6 +20,7 @@ const App = (props) => {
       <div className="app-wrapper-content">
         <Routes>
           <Route path="/dialogs/*" element={<DialogsContainer />} />
+          <Route path="/login/*" element={<LoginContainer />} />
           <Route path="/profile/*" element={<ProfileContainer />} />
           <Route path="/profile/:userId?" element={<ProfileContainer />} />
 

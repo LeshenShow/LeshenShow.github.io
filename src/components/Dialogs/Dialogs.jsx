@@ -2,9 +2,9 @@ import React from "react";
 import style from "./Dialogs.module.css";
 import Message from "./MessageItem/MessageItem";
 import DialogItem from "./DialogItem/DialogItem";
-
+import { Navigate } from "react-router-dom";
 const Dialogs = (props) => {
-  console.log('Dialogs', props)
+  console.log("Dialogs", props);
   // console.log('Dialogs')
   // console.log(props)
   // debugger
@@ -20,10 +20,9 @@ const Dialogs = (props) => {
     <DialogItem name={dialog.name} key={dialog.id} photo={dialog.photo} />
   ));
   let messageItems = props.dialogsPage.messagesData.map((message) => (
-    <Message message={message.message} key={message.id}/>
+    <Message message={message.message} key={message.id} />
   ));
-  let newMessageText = props.dialogsPage.newMessageText;
-  // let newMessage = React.createRef();
+  let newMessageText = props.dialogsPage.newMessageText; // let newMessage = React.createRef();
   let addMessage = () => {
     props.addMessage();
   };
@@ -33,7 +32,9 @@ const Dialogs = (props) => {
     // let text = newMessage.current.value;
     // props.dispatch(updateMessageTextActionCreator(text));
   };
-
+  if (!props.isAuth) {
+    return <Navigate to={"/login"} />;
+  }
   return (
     <div className={style.dialogs}>
       <div className={style.dialogItems}>{dialogItems}</div>
