@@ -1,0 +1,92 @@
+const ADD_MESSAGE = "ADD-MESSAGE";
+const UPDATE_MESSAGE_TEXT = "UPDATE-MESSAGE-TEXT";
+let initialState = {
+  dialogsData: [
+    {
+      id: 0,
+      name: "Andrey",
+      photo: "https://www.svgrepo.com/show/416520/animal-bear-cartoon.svg",
+    },
+    {
+      id: 1,
+      name: "Dima",
+      photo: "https://www.svgrepo.com/show/416529/animal-cartoon-fauna.svg",
+    },
+    {
+      id: 2,
+      name: "Sasha",
+      photo: "https://www.svgrepo.com/show/416543/animal-carnivore-cartoon.svg",
+    },
+    {
+      id: 3,
+      name: "Nikita",
+      photo:
+        "https://www.svgrepo.com/show/416521/animal-carnivore-cartoon-2.svg",
+    },
+    {
+      id: 4,
+      name: "Serezha",
+      photo: "https://www.svgrepo.com/show/416522/animal-austalia-cartoon.svg",
+    },
+    {
+      id: 5,
+      name: "Artem",
+      photo: "https://www.svgrepo.com/show/416523/animal-cartoon-fauna-5.svg",
+    },
+    {
+      id: 6,
+      name: "Valera",
+      photo:
+        "https://www.svgrepo.com/show/416531/animal-carnivore-cartoon-4.svg",
+    },
+  ],
+  messagesData: [
+    { id: 0, message: "Hi" },
+    { id: 1, message: "How are u" },
+    { id: 2, message: "Yo" },
+  ],
+  newMessageText: "",
+};
+const dialogsReducer = (state = initialState, action) => {
+  // let stateCopy = { ...state, messagesData: [...state.messagesData] };
+  // let stateCopy = { ...state };
+  // stateCopy.messagesData = [...state.messagesData];
+      // let stateCopy;
+  switch (action.type) {
+    // case ADD_MESSAGE:
+    //   let newMessage = {
+    //     id: 3,
+    //     message: state.newMessageText,
+    //   };
+    //   stateCopy = {
+    //     ...state,
+    //     newMessageText: "",
+    //     messagesData: [...state.messagesData, newMessage],
+    //   };
+    case ADD_MESSAGE:
+      let newMessage = {
+        id: 777,
+        message: state.newMessageText,
+      };
+      return {
+        ...state,
+        newMessageText: "",
+        messagesData: [...state.messagesData, newMessage],
+      };
+    case UPDATE_MESSAGE_TEXT:
+      return {
+        ...state,
+        newMessageText: action.newText,
+      };
+    default:
+      break;
+  }
+
+  return state;
+};
+export const addMessageActionCreator = () => ({ type: ADD_MESSAGE });
+export const updateMessageTextActionCreator = (text) => ({
+  type: UPDATE_MESSAGE_TEXT,
+  newText: text,
+});
+export default dialogsReducer;

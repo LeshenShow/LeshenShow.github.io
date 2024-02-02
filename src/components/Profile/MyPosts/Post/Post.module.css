@@ -1,0 +1,26 @@
+.item {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  background-color:rgba(162, 126, 173, 0.9);
+}
+.photo img {
+  width: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.buttonLike {
+  width: 50px;
+  height: 30px;
+  margin-bottom: 0;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: blueviolet;
+  border: none;
+
+}
+.likes img {
+  width: 20px;
+}
