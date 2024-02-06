@@ -1,6 +1,7 @@
 import React from "react";
 import style from "./ProfileInfo.module.css";
 import Preloader from "../../common/Preloader/Preloader";
+import ProfileStatus from "./ProfileStatus/ProfileStatus";
 const ProfileInfo = (props) => {
   console.log("ProfileInfo", props);
   if (!props.profile) {
@@ -11,10 +12,14 @@ const ProfileInfo = (props) => {
     props.profile.photos.small === null
       ? "https://www.svgrepo.com/show/416527/animal-bird-cartoon.svg"
       : props.profile.photos.small;
+
   return (
-    <div className={style.descriptionBlock}>
-      <div className={style.description}>{props.profile.fullName}</div>
-      <img className={style.avatar} src={photoSrc} alt="error" />
+    <div>
+      <div className={style.descriptionBlock}>
+        <div className={style.description}>{props.profile.fullName}</div>
+        <img className={style.avatar} src={photoSrc} alt="error" />
+      </div>
+      <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
     </div>
   );
 };

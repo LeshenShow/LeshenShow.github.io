@@ -8,6 +8,8 @@ import {
 } from "../../redux/usersReducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 class UsersAPIComponent extends React.Component {
   componentDidMount() {
@@ -88,7 +90,17 @@ let mapDispatchToProps = {
   setCurrentPage,
   getUsers,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent);
+// export default withAuthRedirect(
+//   connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent)
+// );
+export default compose(
+  withAuthRedirect, // добавляем защиту аутентификации
+  connect(mapStateToProps, mapDispatchToProps)
+)(UsersAPIComponent);
+
+// let withRedirect = withAuthRedirect(UsersAPIComponent);
+// export default connect(mapStateToProps, mapDispatchToProps)(withRedirect);
+
 // let mapDispatchToProps = (dispatch = null) => {
 //   return {
 //     follow: (userId) => {dispatch(followAC(userId));},
