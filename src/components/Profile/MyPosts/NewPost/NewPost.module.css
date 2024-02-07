@@ -5,10 +5,12 @@
   align-items: stretch;
   padding: 5px;
 }
+
 .textarea {
   flex-grow: 100;
   display: flex;
 }
+
 textarea {
   border: none;
   background-color: rgba(162, 126, 173, 0.9);
@@ -26,6 +28,7 @@ textarea {
   flex-grow: 1;
   margin-left: 5px;
 }
+
 .buttonClick {
   background-color: rgb(126, 67, 182);
   border: none;
@@ -33,6 +36,7 @@ textarea {
   /* color: whitesmoke; */
   width: 100%;
 }
+
 h3 {
   display: flex;
   justify-content: center;
@@ -40,8 +44,8 @@ h3 {
   flex-grow: 1;
   margin-right: 5px;
 }
+
 textarea::-webkit-input-placeholder {
   color: darkblue;
   font-size: 16px;
-
 }

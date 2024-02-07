@@ -59,7 +59,8 @@ let mapDispatchToProps = { getUserProfile, getStatus, updateStatus };
 // let withUrlDataContainerComponent = withRouter(AuthRedirectComponent);
 export default compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthRedirect
 )(ProfileContainer);
 
 // долгий вараиант

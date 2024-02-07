@@ -1,39 +1,45 @@
 import React from "react";
 import style from "./NewPost.module.css";
-
+import { Field, reduxForm } from "redux-form";
+import { validators } from "../../../../utils/validators/validators";
+import { Textarea } from "../../../common/FormsControls/FormsControls";
 const NewPost = (props) => {
-  // let newPostElement = React.createRef();
-  let addPost = () => {
-    // const action = { type: "ADD-POST" }; props.dispatch(action);
-    props.addPost();
-  };
-  // let onPostChange = () => {
-  //   let text = newPostElement.current.value;
-  //   props.dispatch(updateNewPostTextActionCreator(text));
-  // };
-  let onPostChange = (event) => {
-    let text = event.target.value;
-    props.updateNewPostText(text); // стараемся делать без рефов, если это возможно
+  const addNewPost = (formData) => {
+    props.addPost(formData.newPostBody);
   };
   return (
-    <div className={style.posts}>
-      {/* <h3 contentEditable="true">New post</h3> */}
-      <h3>New post</h3>
-      <div className={style.textarea}>
-        <textarea
-          placeholder="Write a new post..."
-          // ref={newPostElement}
-          value={props.newPostText}
-          onChange={onPostChange}
-        />
+    <div>
+      <div>
+        <h3>New post</h3>
       </div>
-      <div className={style.button}>
-        <button className={style.buttonClick} onClick={addPost}>
-          Add post
-        </button>
-      </div>
+
+      <NewPostReduxForm onSubmit={addNewPost} />
     </div>
   );
 };
 
+const NewPostForm = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+      <div>
+        <Field
+          component={Textarea}
+          placeholder={"Write a new post..."}
+          name={"newPostBody"}
+          validate={[
+            validators.required,
+            validators.maxLength15,
+            validators.minLength2,
+          ]}
+        />
+      </div>
+      <div>
+        <button>Add post</button>
+      </div>
+    </form>
+  );
+};
+const NewPostReduxForm = reduxForm({
+  form: "newPost", // unique name for the form
+})(NewPostForm);
 export default NewPost;

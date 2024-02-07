@@ -1,11 +1,8 @@
 import React from "react";
 import style from "./Dialogs.module.css";
-import Message from "./MessageItem/MessageItem";
-import DialogItem from "./DialogItem/DialogItem";
+import Message from "../src/components/Dialogs/MessageItem/MessageItem";
+import DialogItem from "../src/components/Dialogs/DialogItem/DialogItem";
 import { Field, reduxForm } from "redux-form";
-import { validators } from "../../utils/validators/validators";
-import { Textarea } from "../common/FormsControls/FormsControls";
-
 const Dialogs = (props) => {
   console.log("Dialogs", props);
   // console.log('Dialogs')
@@ -25,9 +22,10 @@ const Dialogs = (props) => {
   let messageItems = props.dialogsPage.messagesData.map((message) => (
     <Message message={message.message} key={message.id} />
   ));
-  const addNewMessage = (formData) => {
-    props.addMessage(formData.newMessageBody);
-  };
+  // let newMessageText = props.dialogsPage.newMessageText; // let newMessage = React.createRef();
+  // let text = newMessage.current.value;
+  // props.dispatch(updateMessageTextActionCreator(text));
+  const onSubmit = (formData) => {};
 
   return (
     <div className={style.dialogs}>
@@ -35,7 +33,7 @@ const Dialogs = (props) => {
       <div className={style.messages}>
         {messageItems}
         <div>
-          <DialogReduxForm onSubmit={addNewMessage} />
+          <DialogReduxForm props={props} onSubmit={onSubmit} />
         </div>
       </div>
     </div>
@@ -44,24 +42,29 @@ const Dialogs = (props) => {
 
 const DialogForm = (props) => {
   console.log("DialogForm", props, "");
+  let onMessageChange = (event) => {
+    let text = event.target.value;
+    props.updateMessageText(text);
+  };
+  let addMessage = () => {
+    props.addMessage();
+  };
   // let newMessageText = props.dialogsPage.newMessageText;
+  console.log(props, "TEST");
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
         <Field
           placeholder="Write a new message..."
           className={style.textarea}
-          name={"newMessageBody"}
-          component={Textarea}
-          validate={[
-            validators.required,
-            validators.maxLength15,
-            validators.minLength2,
-          ]}
+          onChange={onMessageChange}
+          // value={newMessageText}
+          name={"dialog"}
+          component={"textarea"}
         />
       </div>
       <div>
-        <button>Send</button>
+        <button onClick={addMessage}>Send</button>
       </div>
     </form>
   );

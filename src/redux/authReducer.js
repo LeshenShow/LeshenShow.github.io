@@ -1,36 +1,56 @@
 import { authAPI } from "../api/api";
+
 const SET_AUTH_USER_DATA = "SET_AUTH_USER_DATA";
+// STATE
 let initialState = {
-  isAuth: false,
   userId: null,
   email: null,
   login: null,
+  isAuth: false,
 };
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_AUTH_USER_DATA:
       return {
         ...state,
-        ...action.data,
-        isAuth: true,
+        ...action.payload,
       };
     default:
       break;
   }
   return state;
 };
-
-export const setAuthUserData = (userId, email, login) => ({
+// ACTION CREATOR
+export const setAuthUserData = (userId, email, login, isAuth) => ({
   type: SET_AUTH_USER_DATA,
-  data: { userId, email, login },
+  payload: { userId, email, login, isAuth },
 });
-
+// THUNK
 export const getAuthUserData = () => {
   return (dispatch) => {
-    authAPI.getMe().then((data) => {
-      if (data.resultCode === 0) {
-        let { id, email, login } = data.data;
-        dispatch(setAuthUserData(id, email, login));
+    authAPI.getMe().then((response) => {
+      if (response.data.resultCode === 0) {
+        let { id, email, login } = response.data.data;
+        dispatch(setAuthUserData(id, email, login, true));
+      }
+    });
+  };
+};
+
+export const login = (email, password, rememberMe) => {
+  return (dispatch) => {
+    authAPI.login(email, password, rememberMe).then((response) => {
+      if (response.data.resultCode === 0) {
+        dispatch(getAuthUserData());
+      }
+    });
+  };
+};
+export const logout = () => {
+  return (dispatch) => {
+    authAPI.logout().then((response) => {
+      if (response.data.resultCode === 0) {
+        dispatch(setAuthUserData(null, null, null, false));
       }
     });
   };
