@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   follow,
-  getUsers,
+  requestUsers,
   setCurrentPage,
   unfollow,
 } from "../../redux/usersReducer";
@@ -10,10 +10,18 @@ import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
+import {
+  getCurrentPage,
+  getFollowingInProgress,
+  getIsFetching,
+  getPageSize,
+  getTotalUsersCount,
+  getUsers,
+} from "../../redux/usersSelectors";
 
 class UsersAPIComponent extends React.Component {
   componentDidMount() {
-    this.props.getUsers(this.props.currentPage, this.props.pageSize);
+    this.props.requestUsers(this.props.currentPage, this.props.pageSize);
   }
   // наследуемся от родит класса, иначе по умолчанию наследование идет
   // constructor(props) {
@@ -46,7 +54,7 @@ class UsersAPIComponent extends React.Component {
   //     });
   // }
   onPageChanged = (pageNumberEvent) => {
-    this.props.getUsers(pageNumberEvent, this.props.pageSize);
+    this.props.requestUsers(pageNumberEvent, this.props.pageSize);
     // this.props.toggleIsFetching(true);
     // this.props.setCurrentPage(pageNumberEvent);
     // usersAPI.getUsers(pageNumberEvent, this.props.pageSize).then((data) => {
@@ -76,19 +84,27 @@ class UsersAPIComponent extends React.Component {
 let mapStateToProps = (state) => {
   console.log("UsersContainer", state);
   return {
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress,
+    // users: state.usersPage.users,
+    // pageSize: state.usersPage.pageSize,
+    // totalUsersCount: state.usersPage.totalUsersCount,
+    // currentPage: state.usersPage.currentPage,
+    // isFetching: state.usersPage.isFetching,
+    // followingInProgress: state.usersPage.followingInProgress,
+
+    // ADD SELECTORS
+    users: getUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingInProgress: getFollowingInProgress(state),
   };
 };
 let mapDispatchToProps = {
   follow,
   unfollow,
   setCurrentPage,
-  getUsers,
+  requestUsers,
 };
 // export default withAuthRedirect(
 //   connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent)
