@@ -94,7 +94,7 @@ let mapDispatchToProps = {
 //   connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent)
 // );
 export default compose(
-  withAuthRedirect, // добавляем защиту аутентификации
+  // withAuthRedirect, // добавляем защиту аутентификации
   connect(mapStateToProps, mapDispatchToProps)
 )(UsersAPIComponent);
 
