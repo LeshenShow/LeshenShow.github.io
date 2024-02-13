@@ -1,7 +1,10 @@
 import React from "react";
 import style from "./Login.module.css";
 import { Field, reduxForm } from "redux-form";
-import { Input } from "../common/FormsControls/FormsControls";
+import {
+  Input,
+  createFieldManual,
+} from "../common/FormsControls/FormsControls";
 import { validators } from "../../utils/validators/validators";
 import { Navigate } from "react-router-dom";
 const Login = (props) => {
@@ -23,33 +26,19 @@ const Login = (props) => {
 const LoginForm = (props) => {
   return (
     <form onSubmit={props.handleSubmit}>
-      <div>
-        <Field
-          component={Input}
-          placeholder={"Email"}
-          name={"email"}
-          validate={validators.required}
-        />
-      </div>
-      <div>
-        <Field
-          component={Input}
-          type={"password"}
-          placeholder={"Password"}
-          name={"password"}
-          validate={validators.required}
-        />
-        {/* <Field component={"input"} placeholder={"Password"} name={"password"} /> */}
-      </div>
-      <div>
-        <Field
-          component={Input}
-          type={"checkbox"}
-          name={"rememberMe"}
-          // validate={validators.required}
-        />
-        remember me
-      </div>
+      {createFieldManual(Input, "email", {
+        validate: validators.required,
+        placeholder: "Email",
+      })}
+      {createFieldManual(Input, "password", {
+        placeholder: "Password",
+        validate: validators.required,
+        type: "password",
+      })}
+      {createFieldManual(Input, "rememberMe", {
+        type: "checkbox",
+        text: "remember me",
+      })}
       {props.error && (
         <div className={style.formSummaryError}>ERROR: {props.error}</div>
       )}
@@ -64,3 +53,34 @@ const LoginReduxForm = reduxForm({
   form: "login", // unique name for the form
 })(LoginForm);
 export default Login;
+// //1
+//         {
+//           /* <Field
+//           component={Input}
+//           placeholder={"Email"}
+//           name={"email"}
+//           validate={validators.required}
+//         /> */
+// }
+// //2
+//                 {
+//                   /* <Field
+//           component={Input}
+//           type={"password"}
+//           placeholder={"Password"}
+//           name={"password"}
+//           validate={validators.required}
+//         /> */
+//                 }
+//                 {
+//                   /* <Field component={"input"} placeholder={"Password"} name={"password"} /> */
+// }
+//              //3
+//         {
+//           /* <Field
+//           component={Input}
+//           type={"checkbox"}
+//           name={"rememberMe"}
+//           // validate={validators.required}
+//         /> */
+//         }

@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { updateObjectInArray } from "../utils/object-helpers";
 
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
@@ -22,23 +23,29 @@ const usersReducer = (state = initialState, action) => {
     case FOLLOW:
       return {
         ...state,
-        users: state.users.map((user) => {
-          if (user.id === action.userId) {
-            return { ...user, followed: true };
-          }
-          return user;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: true,
         }),
+        // users: state.users.map((user) => {
+        //   if (user.id === action.userId) {
+        //     return { ...user, followed: true };
+        //   }
+        //   return user;
+        // }),
         // users: [...state.users]
       };
     case UNFOLLOW:
       return {
         ...state,
-        users: state.users.map((user) => {
-          if (user.id === action.userId) {
-            return { ...user, followed: false };
-          }
-          return user;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: false,
         }),
+        // users: state.users.map((user) => {
+        //   if (user.id === action.userId) {
+        //     return { ...user, followed: false };
+        //   }
+        //   return user;
+        // }),
         // users: [...state.users]
       };
     case SET_USERS: {
@@ -88,44 +95,71 @@ export const toggleFollowingInProgress = (isFetching, userId) => ({
   isFetching,
   userId,
 });
+//ThunkCreator
+export const requestUsers = (page, pageSize) => async (dispatch) => {
+  dispatch(toggleIsFetching(true));
+  let response = await usersAPI.getUsers(page, pageSize);
+  dispatch(setCurrentPage(page));
+  dispatch(toggleIsFetching(false));
+  dispatch(setUsers(response.data.items));
+  dispatch(setTotalUsersCount(response.data.totalCount));
+};
+// Мое решение функционала подписок follow/unfollow. Один экшн и одна санка. Экшн работает по принципу замены значения на противоположное, типа followed = !followed. Санка принимает id юзера и действие в виде строки (подписка или отписка). Принимает там, где вызывается, в компоненте User. Действие зависит от того, что в данный момент в стейте, подписаны или НЕподписаны. Санка подставляет это действие как название метода APIшки, которая и делает нужный запрос в санке. А экшн всегда вызывается один и тот же.
 
-export const requestUsers = (page, pageSize) => {
-  //ThunkCreator
-  return (dispatch) => {
-    dispatch(toggleIsFetching(true));
-    usersAPI.getUsers(page, pageSize).then((data) => {
-      dispatch(setCurrentPage(page));
-      dispatch(toggleIsFetching(false));
-      dispatch(setUsers(data.items));
-      dispatch(setTotalUsersCount(data.totalCount));
-    });
-  };
+// export function toggleFollow(id, status) {
+//   return (dispatch) => {
+//     dispatch(isFollow(id, true));
+//     requestAPI[status](id)
+//     .then(data => {
+//       if (data.resultCode === 0) {
+//         dispatch(follow(id));
+//       } else if (data.resultCode === 1) {
+//         console.log(`ERROR: ${data.messages[0]}`);
+//       }
+//       dispatch(isFollow(id, false));
+//     })
+//   }
+// }
+const followUnfollowFlow = async (
+  dispatch,
+  userId,
+  apiMethod,
+  actionCreator
+) => {
+  dispatch(toggleFollowingInProgress(true, userId));
+  let response = await apiMethod(userId);
+  if (response.data.resultCode === 0) {
+    dispatch(actionCreator(userId));
+  }
+  dispatch(toggleFollowingInProgress(false, userId));
 };
 
-export const follow = (userId) => {
-  return (dispatch) => {
-    dispatch(toggleFollowingInProgress(true, userId));
-    usersAPI.follow(userId).then((data) => {
-      if (data.resultCode === 0) {
-        dispatch(followSuccess(userId));
-      }
-      dispatch(toggleFollowingInProgress(false, userId));
-    });
-  };
+export const follow = (userId) => async (dispatch) => {
+  let apiMethod = usersAPI.follow.bind(usersAPI);
+  let actionCreator = followSuccess;
+  followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
 };
-export const unfollow = (userId) => {
-  return (dispatch) => {
-    dispatch(toggleFollowingInProgress(true, userId));
-    usersAPI.unfollow(userId).then((data) => {
-      if (data.resultCode === 0) {
-        dispatch(unfollowSuccess(userId));
-      }
-      dispatch(toggleFollowingInProgress(false, userId));
-    });
-  };
+export const unfollow = (userId) => async (dispatch) => {
+  let apiMethod = usersAPI.unfollow.bind(usersAPI);
+  let actionCreator = unfollowSuccess;
+  followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
 };
 
 export default usersReducer;
+// refactoring .then to async await
+
+// export const unfollow2 = (userId) => {
+//   return (dispatch) => {
+//     dispatch(toggleFollowingInProgress(true, userId));
+//     usersAPI.unfollow(userId).then((data) => {
+//       if (data.resultCode === 0) {
+//         dispatch(unfollowSuccess(userId));
+//       }
+//       dispatch(toggleFollowingInProgress(false, userId));
+//     });
+//   };
+// };
+
 // export const setCurrentPageAC = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage: currentPage});
 //
 // export const updateNewPostTextActionCreator = (text) => ({

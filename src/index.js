@@ -6,17 +6,12 @@ import App from "./App";
 import store from "./redux/redux-store";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import SamuraiJSApp from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 let rerenderEntireTree = (state) => {
-  root.render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  );
+  root.render(<SamuraiJSApp />);
 };
 rerenderEntireTree(store.getState());
 
@@ -25,3 +20,17 @@ rerenderEntireTree(store.getState());
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 // reportWebVitals(console.log);
+
+//  before 92 lection
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// let rerenderEntireTree = (state) => {
+//   root.render(
+//     <BrowserRouter>
+//       <Provider store={store}>
+//         <App />
+//       </Provider>
+//     </BrowserRouter>
+//   );
+// };
+// rerenderEntireTree(store.getState());

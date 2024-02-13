@@ -21,7 +21,8 @@ import {
 
 class UsersAPIComponent extends React.Component {
   componentDidMount() {
-    this.props.requestUsers(this.props.currentPage, this.props.pageSize);
+    let { currentPage, pageSize } = this.props;
+    this.props.requestUsers(currentPage, pageSize);
   }
   // наследуемся от родит класса, иначе по умолчанию наследование идет
   // constructor(props) {
@@ -54,7 +55,8 @@ class UsersAPIComponent extends React.Component {
   //     });
   // }
   onPageChanged = (pageNumberEvent) => {
-    this.props.requestUsers(pageNumberEvent, this.props.pageSize);
+    let { pageSize } = this.props;
+    this.props.requestUsers(pageNumberEvent, pageSize);
     // this.props.toggleIsFetching(true);
     // this.props.setCurrentPage(pageNumberEvent);
     // usersAPI.getUsers(pageNumberEvent, this.props.pageSize).then((data) => {

@@ -1,58 +1,60 @@
 import React from "react";
 import style from "../ProfileInfo.module.css";
-class ProfileStatus extends React.Component {
-  state = { editMode: false, status: this.props.status };
-  // чтобы не потерялся контекст и не байндить делаем стрелочный метод
-  // activateEditMode = () => { }
-  // alert("check");
-  // this.state.editMode = true; // но тогда здесь он не поймет this  и скажет undefinded
-  activateEditMode = () => {
-    //this.forceUpdate(); // в крайнем случае
-    // console.log(this);
-    this.setState({ editMode: true });
+import { useState } from "react";
+import { useEffect } from "react";
+
+// let arr = [true, () => {}];
+// let [a, setA] = arr;
+
+const ProfileStatus = (props) => {
+  // let stateWithSetState = useState(false); // [false, function]
+  // let editMode = stateWithSetState[0];
+  // let setEditMode = stateWithSetState[1];
+  let [editMode, setEditMode] = useState(false); // [false, function]
+  let [status, setStatus] = useState(props.status);
+
+  useEffect(() => {
+    setStatus(props.status);
+  }, [props.status]);
+
+  const activateEditMode = () => {
+    setEditMode(true);
   };
-  deactivateEditMode = () => {
-    this.setState({ editMode: false });
-    this.props.updateStatus(this.state.status);
+  const deactivateEditMode = () => {
+    setEditMode(false);
+    props.updateStatus(status);
   };
-  onStatusChange = (e) => {
-    this.setState({ status: e.currentTarget.value });
+  const onStatusChange = (element) => {
+    setStatus(element.currentTarget.value);
   };
-  componentDidUpdate(prevProps, prevState) {
-    // дает прошлые данные? нужен для синхронизации локального и глобального стейта
-    if (prevProps.status !== this.props.status) {
-      this.setState({ status: this.props.status });
-    }
-  }
-  render() {
-    return (
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      {/* если не эдит мод, то */}
+      {!editMode && (
+        <div>
+          <span className={style.status} onDoubleClick={activateEditMode}>
+            {props.status || "---------"}
+          </span>
+        </div>
+      )}
+      {editMode && (
+        <div>
+          <input
+            className={style.status}
+            onChange={onStatusChange}
+            onBlur={deactivateEditMode}
+            value={status}
+            autoFocus={true}
+          ></input>
+        </div>
+      )}
       <div>
-        {!this.state.editMode && (
-          <div>
-            {/* <span onDoubleClick={this.activateEditMode.bind(this)}> */}
-            <span
-              onDoubleClick={this.activateEditMode}
-              className={style.status}
-            >
-              {this.props.status || "---------"}
-            </span>
-          </div>
-        )}
-        {this.state.editMode && (
-          <div>
-            <input
-              onBlur={this.deactivateEditMode}
-              //   onBlur={this.deactivateEditMode.bind(this)}
-              className={style.status}
-              value={this.state.status}
-              autoFocus={true}
-              onChange={this.onStatusChange}
-            ></input>
-          </div>
-        )}
+        <p>You clicked {count} times</p>
+        <button onClick={() => setCount(count + 1)}>Click me</button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default ProfileStatus;
