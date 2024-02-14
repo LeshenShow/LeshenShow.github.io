@@ -1,27 +1,38 @@
 // import logo from './logo.svg';
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import { Routes, Route } from "react-router-dom";
-import News from "./components/News/News";
-import Music from "./components/Music/Music";
-import Settings from "./components/Settings/Settings";
-import Friends from "./components/Friends/Friends";
-import NavbarContainer from "./components/Navbar/NavbarContainer";
-import UsersContainer from "./components/Users/UsersContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
-import HeaderContainer from "./components/Header/HeaderContainer";
-import LoginContainer from "./components/Login/LoginContainer";
-
-import { connect } from "react-redux";
+import {
+  Routes,
+  Route,
+  BrowserRouter,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import { Provider, connect } from "react-redux";
 import { compose } from "redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { initializeApp } from "./redux/appReducer";
-import Preloader from "./components/common/Preloader/Preloader";
 
+import NavbarContainer from "./components/Navbar/NavbarContainer";
+import HeaderContainer from "./components/Header/HeaderContainer";
+import Preloader from "./components/common/Preloader/Preloader";
+import { initializeApp } from "./redux/appReducer";
 import store from "./redux/redux-store";
-import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+const DialogsContainer = React.lazy(() =>
+  import("./components/Dialogs/DialogsContainer")
+);
+const ProfileContainer = React.lazy(() =>
+  import("./components/Profile/ProfileContainer")
+);
+const Music = React.lazy(() => import("./components/Music/Music"));
+const UsersContainer = React.lazy(() =>
+  import("./components/Users/UsersContainer")
+);
+const LoginContainer = React.lazy(() =>
+  import("./components/Login/LoginContainer")
+);
+const News = React.lazy(() => import("./components/News/News"));
+const Settings = React.lazy(() => import("./components/Settings/Settings"));
+const Friends = React.lazy(() => import("./components/Friends/Friends"));
 
 class App extends React.Component {
   componentDidMount() {
@@ -38,18 +49,26 @@ class App extends React.Component {
         <HeaderContainer />
         <NavbarContainer />
         <div className="app-wrapper-content">
-          <Routes>
-            <Route path="/dialogs/*" element={<DialogsContainer />} />
-            <Route path="/login/*" element={<LoginContainer />} />
-            <Route path="/profile/*" element={<ProfileContainer />} />
-            <Route path="/profile/:userId?" element={<ProfileContainer />} />
+          <Suspense //ленивая загрузка, можно обернуть отдельный компонент
+            fallback={
+              <div>
+                <Preloader />
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/dialogs/*" element={<DialogsContainer />} />
+              <Route path="/login/*" element={<LoginContainer />} />
+              <Route path="/profile/*" element={<ProfileContainer />} />
+              <Route path="/profile/:userId?" element={<ProfileContainer />} />
 
-            <Route path="/news/*" element={<News />} />
-            <Route path="/music/*" element={<Music />} />
-            <Route path="/settings/*" element={<Settings />} />
-            <Route path="/friends/*" element={<Friends />} />
-            <Route path="/users/*" element={<UsersContainer />} />
-          </Routes>
+              <Route path="/news/*" element={<News />} />
+              <Route path="/music/*" element={<Music />} />
+              <Route path="/settings/*" element={<Settings />} />
+              <Route path="/friends/*" element={<Friends />} />
+              <Route path="/users/*" element={<UsersContainer />} />
+            </Routes>
+          </Suspense>
         </div>
       </div>
     );

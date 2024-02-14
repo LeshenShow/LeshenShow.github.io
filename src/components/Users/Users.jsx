@@ -6,7 +6,7 @@ import User from "./User";
 let Users = (props) => {
   return (
     <div className={style.userBody}>
-      <Paginator {...props} key={null} />
+      <Paginator {...props} key={null} maxSize={100} />
 
       {props.users.map((user) => (
         <User

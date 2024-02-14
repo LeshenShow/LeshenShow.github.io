@@ -1,31 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./Paginator.module.css";
 
 let Paginator = (props) => {
-  console.log("Paginator", props.pageSize);
-  let pagesMaximum = 10;
-  let pagesUpload = Math.ceil(props.totalUsersCount / props.pageSize);
-  let pagesCount = Math.min(pagesUpload, pagesMaximum);
-  let pages = [];
+  let totalItemsCount = props.totalUsersCount;
+  let portionSize = Math.max(props.pageSize, 9);
+  let pagesUpload = Math.ceil(totalItemsCount / portionSize);
+  let portionCount = Math.min(pagesUpload, props.maxSize);
+  let [portionNumber, setPortionNumber] = useState(1);
+  let leftPortion = (portionNumber - 1) * portionSize + 1;
+  let rightPortion = portionNumber * portionSize;
 
-  for (let index = 1; index <= pagesCount; index++) {
-    pages.push(index);
+  const pages = [];
+  for (let i = 1; i <= portionCount; i++) {
+    pages.push(i);
   }
-
   return (
     <div className={style.pageList}>
-      {pages.map((page) => {
-        return (
-          <span
-            className={props.currentPage === page && style.selectedPage}
-            onClick={(event_obrabotchik) => {
-              props.onPageChanged(page);
-            }}
-          >
-            {page}
-          </span>
-        );
-      })}
+      {portionNumber > 1 && (
+        <button
+          onClick={() => {
+            setPortionNumber(portionNumber - 1);
+          }}
+        >
+          {"PREV"}
+        </button>
+      )}
+      {pages
+        .filter((page) => page >= leftPortion && page <= rightPortion)
+        .map((page) => {
+          return (
+            <span
+              className={props.currentPage === page && style.selectedPage}
+              onClick={(event_obrabotchik) => {
+                props.onPageChanged(page);
+              }}
+            >
+              {page}
+            </span>
+          );
+        })}
+
+      {portionCount > portionNumber && (
+        <button
+          onClick={() => {
+            setPortionNumber(portionNumber + 1);
+          }}
+        >
+          {"NEXT"}
+        </button>
+      )}
     </div>
   );
 };

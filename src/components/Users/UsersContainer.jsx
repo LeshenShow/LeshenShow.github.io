@@ -8,7 +8,6 @@ import {
 } from "../../redux/usersReducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
-import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
 import {
   getCurrentPage,
@@ -84,17 +83,8 @@ class UsersAPIComponent extends React.Component {
 }
 
 let mapStateToProps = (state) => {
-  console.log("UsersContainer", state);
   return {
-    // users: state.usersPage.users,
-    // pageSize: state.usersPage.pageSize,
-    // totalUsersCount: state.usersPage.totalUsersCount,
-    // currentPage: state.usersPage.currentPage,
-    // isFetching: state.usersPage.isFetching,
-    // followingInProgress: state.usersPage.followingInProgress,
-
-    // ADD SELECTORS
-    users: getUsers(state),
+    users: getUsers(state), // before ADD SELECTORS users: state.usersPage.users,
     pageSize: getPageSize(state),
     totalUsersCount: getTotalUsersCount(state),
     currentPage: getCurrentPage(state),
