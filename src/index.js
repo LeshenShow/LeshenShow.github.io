@@ -35,3 +35,4 @@ reportWebVitals();
 // };
 // rerenderEntireTree(store.getState());
 // C:\Users\Leshen\Desktop\JS\after_courses\react\ZooPlanet\LeshenShow.github.io\src\App.js
+    // "redux-form": "^8.3.10",
