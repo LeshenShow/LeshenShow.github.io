@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "./Paginator.module.css";
-
+import cn from "classnames";
 let Paginator = (props) => {
   let totalItemsCount = props.totalUsersCount;
   let portionSize = Math.max(props.pageSize, 9);
@@ -15,7 +15,7 @@ let Paginator = (props) => {
     pages.push(i);
   }
   return (
-    <div className={style.pageList}>
+    <div className={cn(style.pageList)}>
       {portionNumber > 1 && (
         <button
           onClick={() => {
@@ -30,7 +30,11 @@ let Paginator = (props) => {
         .map((page) => {
           return (
             <span
-              className={props.currentPage === page && style.selectedPage}
+              key={page}
+              className={cn(
+                { [style.selectedPage]: props.currentPage === page },
+                style.pageList
+              )}
               onClick={(event_obrabotchik) => {
                 props.onPageChanged(page);
               }}

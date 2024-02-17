@@ -1,10 +1,13 @@
-import { profileAPI } from "../api/api";
+import { stopSubmit } from "redux-form";
+import { authAPI, profileAPI } from "../api/api";
 
 const ADD_POST = "ADD-POST";
 // const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
 const DELETE_POST = "DELETE_POST";
+const SAVE_PHOTO = "SAVE_PHOTO";
+
 // STATE
 let initialState = {
   postData: [
@@ -58,6 +61,14 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         postData: state.postData.filter((p) => p.id !== action.postId),
       };
+    case SAVE_PHOTO:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          photos: action.photos,
+        },
+      };
     default:
       break;
   }
@@ -85,6 +96,11 @@ export const deletePost = (postId) => ({
   type: DELETE_POST,
   postId: postId,
 });
+export const savePhotoSuccess = (photos) => ({
+  type: SAVE_PHOTO,
+  photos: photos,
+});
+
 // THUNKS
 export const getUserProfile = (userId) => async (dispatch) => {
   let response = await profileAPI.getUserProfile(userId);
@@ -98,6 +114,30 @@ export const updateStatus = (status) => async (dispatch) => {
   let response = await profileAPI.updateStatus(status);
   if (response.data.resultCode === 0) {
     dispatch(setStatus(status));
+  }
+};
+export const savePhoto = (file) => async (dispatch) => {
+  let response = await profileAPI.savePhoto(file);
+  if (response.data.resultCode === 0) {
+    dispatch(savePhotoSuccess(response.data.data.photos));
+  }
+};
+export const saveProfile = (profile) => async (dispatch, getState) => {
+  // обратились к глобальному редьюсеру, достали юзер АйДи
+  const userId = getState().auth.userId;
+  let response = await profileAPI.saveProfile(profile);
+  // console.log(response.data);
+  if (response.data.resultCode === 0) {
+    dispatch(getUserProfile(userId));
+  } else {
+    dispatch(
+      stopSubmit("profileData", {
+        _error: response.data.messages[0],
+      })
+    );
+    // для ошибки в конкретном поле
+    // dispatch(stopSubmit("profileData", {{'contacts':{'facebook': response.data.messages[0]}},}));
+    // return Promise.reject(response.data.messages[0]); // кладет сайт при ошибке почему-то
   }
 };
 export default profileReducer;

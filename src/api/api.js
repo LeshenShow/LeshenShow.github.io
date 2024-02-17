@@ -24,14 +24,30 @@ export const usersAPI = {
 };
 export const profileAPI = {
   getUserProfile(userId) {
-    console.log(userId);
+    // console.log(userId);
     return instance.get(`profile/${userId}`);
   },
   getStatus(userId) {
     return instance.get(`profile/status/${userId}`);
   },
   updateStatus(status) {
-    return instance.put(`profile/status/`, { status: status });
+    try {
+      return instance.put(`profile/status/`, { status: status });
+    } catch (error) {
+      console.log("error");
+    }
+  },
+  savePhoto(photoFile) {
+    const formData = new FormData();
+    formData.append("image", photoFile);
+    return instance.put(
+      `profile/photo/`,
+      formData
+      // {headers: { "Content-Type": "multipart/form-data" }}
+    );
+  },
+  saveProfile(profile) {
+    return instance.put(`profile/`, profile); // здесь нужно отправить именно объект
   },
 };
 // return instance.get(`${url}/profile/${userId}`).then((response) => {
@@ -41,10 +57,21 @@ export const authAPI = {
   getMe() {
     return instance.get(`auth/me`);
   },
-  login(email, password, rememberMe = false) {
-    return instance.post(`auth/login`, { email, password, rememberMe });
+  login(email, password, rememberMe = false, captcha) {
+    // console.log(captcha);
+    return instance.post(`auth/login`, {
+      email,
+      password,
+      rememberMe,
+      captcha,
+    });
   },
   logout() {
     return instance.delete(`auth/login`);
+  },
+};
+export const securityAPI = {
+  getCaptchaUrl() {
+    return instance.get(`security/get-captcha-url`);
   },
 };

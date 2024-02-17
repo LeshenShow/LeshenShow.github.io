@@ -8,7 +8,7 @@ import NewPostContainer from "./NewPost/NewPostContainer";
 // shouldComponentUpdate(nextProps, nextState) {
 //   return nextProps !== this.props || nextState !== this.state}
 const MyPosts = React.memo((props) => {
-  console.log("render");
+  // console.log("render");
   let postItem = props.postData.map((post) => (
     <Post message={post.message} likes={post.likes} key={post.id} />
   ));

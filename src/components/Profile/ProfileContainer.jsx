@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import {
   getStatus,
   getUserProfile,
+  savePhoto,
+  saveProfile,
   updateStatus,
 } from "../../redux/profileReducer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -11,26 +13,36 @@ import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
 
 class ProfileContainer extends React.Component {
-  componentDidMount() {
+  refreshProfile() {
     let userId = this.props.router.params.userId;
     if (!userId) {
       userId = this.props.authorizedUserId;
-      //  kпохая практика лучше делать это в рендере  а еще лучше чтобы стейт делал редирект
+      //  плохая практика лучше делать это в рендере  а еще лучше чтобы стейт делал редирект
       if (!userId) {
         this.props.history.push("/login");
       }
     }
-    console.log("componentDidMount Props", this.props);
     this.props.getUserProfile(userId); // console.log("componentDidMount Response", response);// console.log("data", data);
     this.props.getStatus(userId);
+  }
+
+  componentDidMount() {
+    this.refreshProfile();
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.router.params.userId !== prevProps.router.params.userId) {
+      this.refreshProfile();
+    }
   }
   render() {
     return (
       <Profile
+        isOwner={!this.props.router.params.userId}
         {...this.props}
         profile={this.props.profile}
         status={this.props.status}
         updateStatus={this.props.updateStatus}
+        savePhoto={this.props.savePhoto}
       />
     );
   }
@@ -51,7 +63,13 @@ let mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
   authorizedUserId: state.auth.userId,
 });
-let mapDispatchToProps = { getUserProfile, getStatus, updateStatus };
+let mapDispatchToProps = {
+  getUserProfile,
+  getStatus,
+  updateStatus,
+  savePhoto,
+  saveProfile,
+};
 
 // let withUrlDataContainerComponent = withRouter(ProfileContainer);
 // export default connect(

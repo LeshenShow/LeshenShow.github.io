@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Login from "./Login";
-import { login, logout } from "../../redux/authReducer";
+import { getCaptchaUrl, login, logout } from "../../redux/authReducer";
 
 class LoginContainer extends React.Component {
   componentDidMount() {}
@@ -9,7 +9,10 @@ class LoginContainer extends React.Component {
     return <Login {...this.props} />;
   }
 }
-const mapStateToProps = (state) => ({ isAuth: state.auth.isAuth });
+const mapStateToProps = (state) => ({
+  isAuth: state.auth.isAuth,
+  captchaUrl: state.auth.captchaUrl,
+});
 const mapDispatchToProps = {
   login: login,
   logout: logout,

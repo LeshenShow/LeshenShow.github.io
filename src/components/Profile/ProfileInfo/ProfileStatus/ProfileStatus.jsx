@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import style from "../ProfileInfo.module.css";
-import { useState } from "react";
-import { useEffect } from "react";
 
 // let arr = [true, () => {}];
 // let [a, setA] = arr;
@@ -10,8 +8,9 @@ const ProfileStatus = (props) => {
   // let stateWithSetState = useState(false); // [false, function]
   // let editMode = stateWithSetState[0];
   // let setEditMode = stateWithSetState[1];
-  let [editMode, setEditMode] = useState(false); // [false, function]
-  let [status, setStatus] = useState(props.status);
+  const [editMode, setEditMode] = useState(false); // [false, function]
+  const [status, setStatus] = useState(props.status);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     setStatus(props.status);
@@ -27,12 +26,13 @@ const ProfileStatus = (props) => {
   const onStatusChange = (element) => {
     setStatus(element.currentTarget.value);
   };
-  const [count, setCount] = useState(0);
+
   return (
     <div>
       {/* если не эдит мод, то */}
       {!editMode && (
         <div>
+          <b>Status: </b>
           <span className={style.status} onDoubleClick={activateEditMode}>
             {props.status || "---------"}
           </span>

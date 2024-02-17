@@ -6,7 +6,7 @@ const Header = (props) => {
   return (
     <header className={style.header}>
       <div className={""}>https://social-network.samuraijs.com/api/1.0</div>
-      <div className={style.name}>Zoo's Area</div>
+      <div className={style.name}>Zoo Planet</div>
       <div className={style.logo}>
         <img
           alt=""

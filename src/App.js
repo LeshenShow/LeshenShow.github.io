@@ -8,6 +8,7 @@ import {
   useLocation,
   useNavigate,
   useParams,
+  Navigate,
 } from "react-router-dom";
 import { Provider, connect } from "react-redux";
 import { compose } from "redux";
@@ -35,15 +36,20 @@ const Settings = React.lazy(() => import("./components/Settings/Settings"));
 const Friends = React.lazy(() => import("./components/Friends/Friends"));
 
 class App extends React.Component {
+  catchAllUnhandleError = (reason, promiseRejectionEvent) => {};
   componentDidMount() {
     this.props.initializeApp();
+    // чекаем ошибки на их наличие
+    window.addEventListener("unhandlerejection", this.catchAllUnhandleError);
+  }
+  componentWillUnmount() {
+    // если компонента умрет, нужно удалить мусор, т.к. объект виндов не является частью реакта
+    window.removeEventListener("unhandlerejection", this.catchAllUnhandleError);
   }
   render() {
-    console.log(this.props.initialized);
     if (!this.props.initialized) {
       return <Preloader />;
     }
-    console.log(this.props.initialized);
     return (
       <div className="app-wrapper">
         <HeaderContainer />
@@ -67,6 +73,7 @@ class App extends React.Component {
               <Route path="/settings/*" element={<Settings />} />
               <Route path="/friends/*" element={<Friends />} />
               <Route path="/users/*" element={<UsersContainer />} />
+              <Route path={"/" && "*"} element={<Navigate to="/profile" />} />
             </Routes>
           </Suspense>
         </div>

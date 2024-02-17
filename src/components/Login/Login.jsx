@@ -1,16 +1,22 @@
 import React from "react";
 import style from "./Login.module.css";
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import {
   Input,
   createFieldManual,
 } from "../common/FormsControls/FormsControls";
 import { validators } from "../../utils/validators/validators";
 import { Navigate } from "react-router-dom";
+
 const Login = (props) => {
   const onSubmit = (formData) => {
-    console.log(formData);
-    props.login(formData.email, formData.password, formData.rememberMe);
+    // console.log(formData);
+    props.login(
+      formData.email,
+      formData.password,
+      formData.rememberMe,
+      formData.captcha
+    );
   };
   if (props.isAuth) {
     return <Navigate to={"/profile"} />;
@@ -18,7 +24,7 @@ const Login = (props) => {
   return (
     <div>
       <h1>Login</h1>
-      <LoginReduxForm onSubmit={onSubmit} />
+      <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
     </div>
   );
 };
@@ -39,6 +45,13 @@ const LoginForm = (props) => {
         type: "checkbox",
         text: "remember me",
       })}
+      {props.captchaUrl && <img alt="error" src={props.captchaUrl} />}
+      {props.captchaUrl &&
+        createFieldManual(Input, "captcha", {
+          placeholder: "enter captcha",
+          validate: validators.required,
+        })}
+
       {props.error && (
         <div className={style.formSummaryError}>ERROR: {props.error}</div>
       )}
@@ -48,7 +61,6 @@ const LoginForm = (props) => {
     </form>
   );
 };
-
 const LoginReduxForm = reduxForm({
   form: "login", // unique name for the form
 })(LoginForm);
