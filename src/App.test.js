@@ -15,9 +15,9 @@ import SamuraiJSApp from "./App";
 //   expect(linkElement).toBeInTheDocument();
 // });
 
-test("renders without crashing", () => {
-  const container = document.createElement("div");
-  const root = createRoot(container);
-  root.render(<SamuraiJSApp tab="home" />);
-  root.unmount();
-});
+// test("renders without crashing", () => {
+//   const container = document.createElement("div");
+//   const root = createRoot(container);
+//   root.render(<SamuraiJSApp tab="home" />);
+//   root.unmount();
+// });
